@@ -39,20 +39,20 @@ const Timer = () => {
         let intervalo;
         if (activo) {
             intervalo = setInterval(() => {
-                if (segundos === 1) {
-                    if (modo === "enfoque") {
-                        setModo("descanso")
-                        setSegundos(TIEMPO_DESCANSO)
-                    }
+                // if (segundos === 1) {
+                //     if (modo === "enfoque") {
+                //         setModo("descanso")
+                //         setSegundos(TIEMPO_DESCANSO)
+                //     }
 
-                    if (modo === "descanso") {
-                        setModo("enfoque")
-                        setSegundos(TIEMPO_ENFOQUE)
-                    }
+                //     if (modo === "descanso") {
+                //         setModo("enfoque")
+                //         setSegundos(TIEMPO_ENFOQUE)
+                //     }
 
-                } else {
-                    setSegundos(prev => prev - 1)
-                }
+                // } else {
+                setSegundos(prev => prev - 1)
+                //}
             }, 1000)
         }
 
@@ -60,7 +60,23 @@ const Timer = () => {
             clearInterval(intervalo)
         }
 
-    }, [activo, modo])
+    }, [activo])
+
+
+    useEffect(() => {
+        if (segundos === 0 && activo) {
+            if (modo === "enfoque") {
+                setModo("descanso");
+                setSegundos(TIEMPO_DESCANSO);
+            } else {
+                setModo("enfoque");
+                setSegundos(TIEMPO_ENFOQUE);
+            }
+        }
+    }, [segundos, modo, activo]); // 👈 agrega activo a las dependencias
+
+
+
 
 
     function formatearTiempo(segundos) {
