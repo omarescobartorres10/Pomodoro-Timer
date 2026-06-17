@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"; //utilizamos los hooks
-import './App.css'
+import '../App.css'
+import formatearTiempo from "../utils/formatearTiempo";
 
 const TIEMPO_ENFOQUE = 10; // 25 minutos
 
@@ -79,15 +80,6 @@ const Timer = () => {
         }
     }, [segundos, modo, activo, tiempoEnfoque, tiempoDescanso]);
 
-
-
-
-
-    function formatearTiempo(segundos) {
-        const minutos = Math.floor(segundos / 60);
-        const segs = segundos % 60;
-        return `${minutos.toString().padStart(2, '0')}:${segs.toString().padStart(2, '0')}`;
-    }
 
     return (
         <div className="pomodoro-container">
