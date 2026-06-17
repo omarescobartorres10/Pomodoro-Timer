@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"; //utilizamos los hooks
+import './App.css'
 
 const TIEMPO_ENFOQUE = 10; // 25 minutos
 
@@ -15,7 +16,7 @@ const Timer = () => {
     const [tiempoEnfoque, setTiempoEnfoque] = useState(25 * 60);   // 25 min
 
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
-   
+
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -43,7 +44,7 @@ const Timer = () => {
 
     function restHandle(e) {
         let restValue = Number(e.target.value) * 60;
-        let  restValueNumber = parseInt(restValue)
+        let restValueNumber = parseInt(restValue)
         setTiempoDescanso(restValueNumber);
         //setSegundos(restValueNumber); // opcional: que se vea el cambio
         setActivo(false);
@@ -82,38 +83,40 @@ const Timer = () => {
 
 
 
-function formatearTiempo(segundos) {
-    const minutos = Math.floor(segundos / 60);
-    const segs = segundos % 60;
-    return `${minutos.toString().padStart(2, '0')}:${segs.toString().padStart(2, '0')}`;
-}
+    function formatearTiempo(segundos) {
+        const minutos = Math.floor(segundos / 60);
+        const segs = segundos % 60;
+        return `${minutos.toString().padStart(2, '0')}:${segs.toString().padStart(2, '0')}`;
+    }
 
-
-
-
-return (
-    <>
-        <label htmlFor="">Enfoque</label>
-        <select onChange={timeHandle}> {/**esto tira un evento e */}
-            <option value="0">Seleccionar</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="25">25</option>
-            <option value="30">30</option>
-            <option value="50">50</option>
-        </select>
-        <label htmlFor="">Descaso</label>
-        <select onChange={restHandle}>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-        </select>
-        <h1>{formatearTiempo(segundos)}</h1>
-        <button onClick={activeHandle}>Iniciar</button>
-        <button onClick={pauseHandle}>Pausar</button>
-        <button onClick={resetHandle}>Reset</button>
-    </>
-)
+    return (
+        <div className="pomodoro-container">
+            <h1>{formatearTiempo(segundos)}</h1>
+            <div className="controls">
+                <label>Enfoque</label>
+                <select onChange={timeHandle}>
+                    <option value="0">Seleccionar</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                </select>
+                <label>Descanso</label>
+                <select onChange={restHandle}>  <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option></select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-music"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M13 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M9 17v-13h10v13" /><path d="M9 8h10" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
+            </div>
+            <div className="buttons">
+                
+                <button className="btn-primary" onClick={activeHandle}>Iniciar</button>
+                <button className="btn-secondary" onClick={pauseHandle}>Pausar</button>
+                <button className="btn-reset" onClick={resetHandle}>Reset</button>
+            </div>
+        </div>
+    );
 }
 
 
