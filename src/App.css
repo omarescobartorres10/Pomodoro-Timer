@@ -104,3 +104,12 @@
 .btn-reset:hover {
   background-color: #777;
 }
+
+
+.timer-display {
+  font-size: 6rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+}
