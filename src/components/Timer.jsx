@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"; //utilizamos los hooks
 //import '../App.css'
 import '../styles/Timer.css'
+import confetti from "canvas-confetti"
 import formatearTiempo from "../utils/formatearTiempo";
 import TimerDisplay from "./TimerDisplay";
 import TimeSelectors from "./TimeSelectors";
@@ -23,7 +24,7 @@ const Timer = () => {
 
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
 
-    const [tarea, setTarea] = useState('')
+    const [tarea, setTarea] = useState(() => window.localStorage.getItem('tarea') || '');
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -57,13 +58,13 @@ const Timer = () => {
         setActivo(false);
     }
 
-     const text = tarea ? <p>Tarea: {tarea} </p> : <p>No hay Tareas</p>;
+    const text = tarea ? <p>Tarea: {tarea} </p> : <p>No hay Tareas</p>;
 
     function taskHandle(e) {
         setTarea(e.target.value)
     }
 
-   
+
 
 
 
@@ -72,7 +73,7 @@ const Timer = () => {
         if (activo) {
             intervalo = setInterval(() => {
                 setSegundos(prev => prev - 1)
-            }, 1000)
+            }, 100)
         }
 
         return () => {
@@ -85,6 +86,7 @@ const Timer = () => {
     useEffect(() => {
         if (segundos === 0 && activo) {
             new Audio('/sounds/alarm_clock.mp3').play()
+            confetti()
             if (modo === "enfoque") {
                 setModo("descanso");
                 setSegundos(tiempoDescanso);
@@ -96,32 +98,37 @@ const Timer = () => {
     }, [segundos, modo, activo, tiempoEnfoque, tiempoDescanso]);
 
 
+    useEffect(() => {
+        localStorage.setItem('tarea', tarea);
+    }, [tarea]);
+
+
     return (
         <>
-        <div className="pomodoro-container">
-            <TimerDisplay segundos={segundos} />
-            <TimeSelectors
-                timeHandle={timeHandle}
-                restHandle={restHandle}
-            />
-            <div className="buttons">
-                <TimerControls
-                    onIniciar={activeHandle}
-                    onPausar={pauseHandle}
-                    onReset={resetHandle}
+            <div className="pomodoro-container">
+                <TimerDisplay segundos={segundos} />
+                <TimeSelectors
+                    timeHandle={timeHandle}
+                    restHandle={restHandle}
                 />
+                <div className="buttons">
+                    <TimerControls
+                        onIniciar={activeHandle}
+                        onPausar={pauseHandle}
+                        onReset={resetHandle}
+                    />
+                </div>
             </div>
-        </div>
-         <input 
-            type="text" 
-            placeholder="¿Qué vas a hacer?"
-            value={tarea}
-            onChange={taskHandle}
+            <input
+                type="text"
+                placeholder="¿Qué vas a hacer?"
+                value={tarea}
+                onChange={taskHandle}
             />
             <p>{text}</p>
         </>
-        
-        
+
+
     );
 }
 
