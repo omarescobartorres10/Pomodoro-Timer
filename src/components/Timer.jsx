@@ -24,7 +24,14 @@ const Timer = () => {
 
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
 
-    const [tarea, setTarea] = useState(() => window.localStorage.getItem('tarea') || '');
+    const [tarea, setTarea] = useState(() => {
+        const guardadas = localStorage.getItem('item');
+        return guardadas ? JSON.parse(guardadas) : []
+    })
+
+    const [tareaInput, setTareaInput] = useState('')
+
+    const [tareas, setTareas] = useState([])
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -63,6 +70,28 @@ const Timer = () => {
     function taskHandle(e) {
         setTarea(e.target.value)
     }
+
+    function inputTaskHandle(e) {
+        tareaInput(e.target.value)
+    }
+
+    function agregarTarea() {
+        if (tarea.trim() === '') return; //si está vacio o solo tiene espacio no hace nada
+        const nuevaTarea =  {id: Date.now(), texto: tarea} //objeto con el id en base al date.now y texto es el input de la tarea
+        setTareas([...tareas, nuevaTarea])   //actualiza elarray tareas copiando el array anterior y agregando la nueva tarea
+        setTareaInput('') //se limpia el input.
+       console.log("agregarTarea ejecutada");
+ 
+    }
+
+    
+
+    function deleteTaskHandle(id) {
+        const  nuevasTareas= tareas.filter(tarea => tarea.id !== id)
+        setTareas(nuevasTareas)
+        console.log("eliminarTarea ejecutada con id:", id);
+    }
+
 
 
 
@@ -125,7 +154,18 @@ const Timer = () => {
                 value={tarea}
                 onChange={taskHandle}
             />
-            <p>{text}</p>
+            <span>{text}</span>
+            <button onClick={agregarTarea}>Agregar</button>
+            <ul>
+                {
+                    tareas.map((tarea) => (
+                        <li key={tarea.id}>
+                            {tarea.texto}
+                            <button onClick={() => deleteTaskHandle(tarea.id)}>Eliminar</button>
+                        </li>
+                    ))
+                }
+            </ul>
         </>
 
 
