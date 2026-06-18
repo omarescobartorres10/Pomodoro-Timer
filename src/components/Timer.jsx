@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"; //utilizamos los hooks
-import '../App.css'
+//import '../App.css'
+import '../styles/Timer.css'
 import formatearTiempo from "../utils/formatearTiempo";
 import TimerDisplay from "./TimerDisplay";
 import TimeSelectors from "./TimeSelectors";
@@ -22,6 +23,7 @@ const Timer = () => {
 
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
 
+    const [tarea, setTarea] = useState('')
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -55,6 +57,14 @@ const Timer = () => {
         setActivo(false);
     }
 
+     const text = tarea ? <p>Tarea: {tarea} </p> : <p>No hay Tareas</p>;
+
+    function taskHandle(e) {
+        setTarea(e.target.value)
+    }
+
+   
+
 
 
     useEffect(() => {
@@ -74,6 +84,7 @@ const Timer = () => {
 
     useEffect(() => {
         if (segundos === 0 && activo) {
+            new Audio('/sounds/alarm_clock.mp3').play()
             if (modo === "enfoque") {
                 setModo("descanso");
                 setSegundos(tiempoDescanso);
@@ -86,6 +97,7 @@ const Timer = () => {
 
 
     return (
+        <>
         <div className="pomodoro-container">
             <TimerDisplay segundos={segundos} />
             <TimeSelectors
@@ -100,6 +112,16 @@ const Timer = () => {
                 />
             </div>
         </div>
+         <input 
+            type="text" 
+            placeholder="¿Qué vas a hacer?"
+            value={tarea}
+            onChange={taskHandle}
+            />
+            <p>{text}</p>
+        </>
+        
+        
     );
 }
 
