@@ -25,13 +25,15 @@ const Timer = () => {
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
 
     const [tarea, setTarea] = useState(() => {
-        const guardadas = localStorage.getItem('item');
-        return guardadas ? JSON.parse(guardadas) : []
+        return localStorage.getItem('tarea') || '';
     })
 
     const [tareaInput, setTareaInput] = useState('')
 
-    const [tareas, setTareas] = useState([])
+    const [tareas, setTareas] = useState(() => {
+        const tareasGuardadas = localStorage.getItem('tareas');
+        return tareasGuardadas ? JSON.parse(tareasGuardadas) : []
+    })
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -65,7 +67,7 @@ const Timer = () => {
         setActivo(false);
     }
 
-    const text = tarea ? <p>Tarea: {tarea} </p> : <p>No hay Tareas</p>;
+    const text = tarea ? <p>Tarea: {tarea} </p> : <p>Agregar Tareas</p>;
 
     function taskHandle(e) {
         setTarea(e.target.value)
@@ -77,24 +79,19 @@ const Timer = () => {
 
     function agregarTarea() {
         if (tarea.trim() === '') return; //si está vacio o solo tiene espacio no hace nada
-        const nuevaTarea =  {id: Date.now(), texto: tarea} //objeto con el id en base al date.now y texto es el input de la tarea
+        const nuevaTarea = { id: Date.now(), texto: tarea } //objeto con el id en base al date.now y texto es el input de la tarea
         setTareas([...tareas, nuevaTarea])   //actualiza elarray tareas copiando el array anterior y agregando la nueva tarea
-        setTareaInput('') //se limpia el input.
-       console.log("agregarTarea ejecutada");
- 
+        setTarea('')  //se limpia el input.
+        console.log("agregarTarea ejecutada");
+
     }
 
-    
 
     function deleteTaskHandle(id) {
-        const  nuevasTareas= tareas.filter(tarea => tarea.id !== id)
+        const nuevasTareas = tareas.filter(tarea => tarea.id !== id)
         setTareas(nuevasTareas)
         console.log("eliminarTarea ejecutada con id:", id);
     }
-
-
-
-
 
 
     useEffect(() => {
@@ -130,6 +127,13 @@ const Timer = () => {
     useEffect(() => {
         localStorage.setItem('tarea', tarea);
     }, [tarea]);
+
+
+    useEffect(() => {
+        localStorage.setItem('tareas', JSON.stringify(tareas));
+    }, [tareas]);
+
+
 
 
     return (
