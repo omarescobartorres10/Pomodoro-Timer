@@ -6,6 +6,7 @@ import formatearTiempo from "../utils/formatearTiempo";
 import TimerDisplay from "./TimerDisplay";
 import TimeSelectors from "./TimeSelectors";
 import TimerControls from "./TimerControls";
+import useTask from './hooks/useTasks';
 
 
 const TIEMPO_ENFOQUE = 10; // 25 minutos
@@ -30,10 +31,8 @@ const Timer = () => {
 
     const [tareaInput, setTareaInput] = useState('')
 
-    const [tareas, setTareas] = useState(() => {
-        const tareasGuardadas = localStorage.getItem('tareas');
-        return tareasGuardadas ? JSON.parse(tareasGuardadas) : []
-    })
+    const { tareas, setTareas, tareaActiva, setTareaActiva, agregarTarea, eliminarTarea } = useTask();
+
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
@@ -77,29 +76,13 @@ const Timer = () => {
         tareaInput(e.target.value)
     }
 
-    function agregarTarea() {
-        if (tarea.trim() === '') return; //si está vacio o solo tiene espacio no hace nada
-        const nuevaTarea = { id: Date.now(), texto: tarea } //objeto con el id en base al date.now y texto es el input de la tarea
-        setTareas([...tareas, nuevaTarea])   //actualiza elarray tareas copiando el array anterior y agregando la nueva tarea
-        setTarea('')  //se limpia el input.
-        console.log("agregarTarea ejecutada");
-
-    }
-
-
-    function deleteTaskHandle(id) {
-        const nuevasTareas = tareas.filter(tarea => tarea.id !== id)
-        setTareas(nuevasTareas)
-        console.log("eliminarTarea ejecutada con id:", id);
-    }
-
 
     useEffect(() => {
         let intervalo;
         if (activo) {
             intervalo = setInterval(() => {
                 setSegundos(prev => prev - 1)
-            }, 100)
+            }, 50)
         }
 
         return () => {
@@ -113,7 +96,14 @@ const Timer = () => {
         if (segundos === 0 && activo) {
             new Audio('/sounds/alarm_clock.mp3').play()
             confetti()
-            if (modo === "enfoque") {
+            if (modo === "enfoque" && tareaActiva !== null) {
+                const nuevasTareas = tareas.map((t) => {
+                    if (t.id === tareaActiva) {
+                        return ({ ...t, pomodoros: t.pomodoros + 1 })
+                    }
+                    return t
+                });
+                setTareas(nuevasTareas);
                 setModo("descanso");
                 setSegundos(tiempoDescanso);
             } else {
@@ -122,18 +112,6 @@ const Timer = () => {
             }
         }
     }, [segundos, modo, activo, tiempoEnfoque, tiempoDescanso]);
-
-
-    useEffect(() => {
-        localStorage.setItem('tarea', tarea);
-    }, [tarea]);
-
-
-    useEffect(() => {
-        localStorage.setItem('tareas', JSON.stringify(tareas));
-    }, [tareas]);
-
-
 
 
     return (
@@ -159,17 +137,21 @@ const Timer = () => {
                 onChange={taskHandle}
             />
             <span>{text}</span>
-            <button onClick={agregarTarea}>Agregar</button>
+            <button onClick={() => agregarTarea(tarea)}>Agregar</button>
+            <span>(Pomodoros: {tarea.pomodoros})</span>
             <ul>
                 {
                     tareas.map((tarea) => (
                         <li key={tarea.id}>
-                            {tarea.texto}
-                            <button onClick={() => deleteTaskHandle(tarea.id)}>Eliminar</button>
+                            {tarea.texto} - 🍅 {tarea.pomodoros}
+                            <button onClick={() => eliminarTarea(tarea.id)}>Eliminar</button>
+                            <button onClick={() => setTareaActiva(tarea.id)}>Seleccionar</button>
                         </li>
                     ))
                 }
+
             </ul>
+
         </>
 
 
