@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"; //utilizamos los hooks
+import { useRef } from "react";
 //import '../App.css'
 import '../styles/Timer.css'
 import confetti from "canvas-confetti"
@@ -38,9 +39,19 @@ const Timer = () => {
         setTarea(''); // limpia el input
     };
 
+    const audioRef = useRef(null);
+
+    const reproducirMusica = () => {
+        if (modo === "enfoque") {
+            audioRef.current.play().catch((e) => console.log("Audio bloqueado:", e));
+        }
+    };
+
 
     function activeHandle() {
         setActivo(true) //maneja el estado a activo
+        reproducirMusica()
+
     }
 
     function pauseHandle() {
@@ -118,6 +129,15 @@ const Timer = () => {
         }
     }, [segundos, modo, activo, tiempoEnfoque, tiempoDescanso]);
 
+    useEffect(() => {
+        // if (modo === "enfoque") {
+        //     audioRef.current.play().catch((e) => console.log("Audio bloqueado:", e));
+        // }
+        if (modo === "descanso") {
+            audioRef.current.pause()
+        }
+    }, [modo])
+
 
     return (
         <>
@@ -156,6 +176,7 @@ const Timer = () => {
                 }
 
             </ul>
+            <audio ref={audioRef} src="/sounds/pajaritos.mp3" loop />
 
         </>
 
