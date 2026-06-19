@@ -19,6 +19,7 @@ function useTask() {
         if (texto.trim() === '') return;
         const nuevaTarea = { id: Date.now(), texto, pomodoros: 0 };
         setTareas([...tareas, nuevaTarea]);
+       
     }
 
     function eliminarTarea(id) {
@@ -27,7 +28,7 @@ function useTask() {
     }
 
     function setTareaActivas() {
-        console.log("ola")
+       
     }
 
     return {

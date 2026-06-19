@@ -26,12 +26,17 @@ const Timer = () => {
     const [tiempoDescanso, setTiempoDescanso] = useState(5 * 60);   // 5 min
 
     const [tarea, setTarea] = useState(() => {
-        return localStorage.getItem('tarea') || '';
+        return localStorage.getItem('tazrea') || '';
     })
 
     const [tareaInput, setTareaInput] = useState('')
 
     const { tareas, setTareas, tareaActiva, setTareaActiva, agregarTarea, eliminarTarea } = useTask();
+
+    const handleAgregar = () => {
+        agregarTarea(tarea);
+        setTarea(''); // limpia el input
+    };
 
 
     function activeHandle() {
@@ -137,7 +142,7 @@ const Timer = () => {
                 onChange={taskHandle}
             />
             <span>{text}</span>
-            <button onClick={() => agregarTarea(tarea)}>Agregar</button>
+            <button onClick={handleAgregar}>Agregar</button>
             <span>(Pomodoros: {tarea.pomodoros})</span>
             <ul>
                 {
