@@ -1,16 +1,51 @@
-# React + Vite
+# 🍅 Pomodoro Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de temporizador Pomodoro para gestionar el tiempo de trabajo y descanso, con soporte para tareas, seguimiento de pomodoros y música de fondo.
 
-Currently, two official plugins are available:
+## 🚀 Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- ⏱️ Temporizador con ciclos de **enfoque** y **descanso**.
+- 🎵 **Música de fondo** que se reproduce durante el enfoque.
+- 📋 **Lista de tareas** con contador de pomodoros completados por tarea.
+- 💾 Los datos se guardan automáticamente en `localStorage`.
+- 🎨 Interfaz limpia y personalizable.
 
-## React Compiler
+## 🛠️ Tecnologías utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- ⚛️ React
+- ⚡ Vite
+- 🎶 Web Audio API
+- 🗃️ localStorage
 
-## Expanding the ESLint configuration
+## 📦 Instalación y uso local
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+git clone https://github.com/tuusuario/pomodoro-timer.git
+cd pomodoro-timer
+npm install
+npm run dev
+```
+
+## 🌐 Demo en vivo
+
+[https://easetimerdoro.netlify.app](https://easetimerdoro.netlify.app)
+
+## 📸 Capturas de pantalla
+
+![Vista principal del Pomodoro](./screenshots/pomodoro.png)
+
+---
+
+## 📂 Estructura del proyecto (resumen)
+
+```
+src/
+├── components/       # Componentes de UI
+├── hooks/            # Lógica personalizada (useTasks, useTimer)
+├── utils/            # Funciones auxiliares
+├── App.css           # Estilos globales
+└── main.jsx
+```
+
+---
+
