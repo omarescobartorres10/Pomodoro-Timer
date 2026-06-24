@@ -15,9 +15,9 @@ const Timer = () => {
     const [tarea, setTarea] = useState(() => {
         return localStorage.getItem('tazrea') || '';
     });
-
     const { tareas, setTareas, tareaActiva, setTareaActiva, agregarTarea, eliminarTarea } = useTask();
     const audioRef = useRef(null);
+    const [cancionSeleccionada, setCancionSeleccionada] = useState('/sounds/alarm_clock.mp3');
 
     // Save current task input to localStorage to keep user's original logic
     useEffect(() => {
@@ -171,9 +171,16 @@ const Timer = () => {
                         </li>
                     ))}
                 </ul>
+                <div >
+                    <select onChange={(e) => setCancionSeleccionada(e.target.value)}>
+                    <option value="/sounds/pajaritos2.m4a">Pajaritos</option>
+                    <option value="/sounds/dormir.m4a">Dormir</option>
+                    <option value="/sounds/alarm_clock.mp3">Alarm Clock</option>
+                    </select>
+                </div>
             </div>
 
-            <audio ref={audioRef} src="/sounds/pajaritos.mp3" loop />
+            <audio ref={audioRef} src={cancionSeleccionada} loop />
         </>
     );
 };
